@@ -1,28 +1,28 @@
-# parser.py
-import openai
 import os
-from datetime import datetime
+import openai
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def parse_entry(text):
     prompt = f"""
-    אתה עוזר חקלאי חכם. המשתמש מתאר מה עשה היום בשדה.
+    אתה עוזר חקלאי חכם. המשתמש מתאר מה עשה היום בשטח.
     תחלץ מתוך זה:
-    - פעולות שביצע
-    - זמן עבודה משוער (בשעות)
-    - עלות משוערת בש"ח
+    - רשימת פעולות
+    - זמן עבודה משוער
+    - עלות משוערת
+    החזר תשובה בפורמט JSON בלבד.
 
-    החזר תשובה בפורמט JSON. הנה הטקסט:
-
-    "{text}"
+    טקסט: "{text}"
     """
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
         temperature=0.2
     )
 
@@ -39,4 +39,3 @@ def parse_entry(text):
             "תיאור": text,
             "תאריך": datetime.now().strftime("%Y-%m-%d")
         }
-
