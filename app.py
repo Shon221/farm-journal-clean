@@ -17,8 +17,7 @@ if st.button("✅ נתח ושמור"):
     parsed = parse_entry(user_input)
     save_entry(parsed)
     st.success("✔️ הפעולה נותחה ונשמרה בהצלחה!")
-    st.experimental_rerun()
-
+    st.rerun()
 # --- הצגת טבלה עם אפשרות מחיקה ---
 if os.path.exists(DATA_FILE):
     st.markdown("### 📅 יומן יומי")
@@ -42,8 +41,7 @@ if os.path.exists(DATA_FILE):
                 df = df.drop(i).reset_index(drop=True)
                 df.to_csv(DATA_FILE, index=False)
                 st.success("הרשומה נמחקה בהצלחה.")
-                st.experimental_rerun()
-
+                st.rerun()
     # סיכום יומי כולל שעות עבודה
     if len(df) > 0:
         st.markdown("---")
